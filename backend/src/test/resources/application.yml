@@ -1,0 +1,22 @@
+spring:
+  profiles:
+    active: dev-local
+db:
+  username: 'postgres'
+  password: 'postgres'
+  driverClassName: 'org.postgresql.Driver'
+  minimumIdle: 5
+  maximumPoolSize: 10
+  connectionTimeout: 10000
+  validationTimeout: 5000
+  connectionTestQuery: 'SELECT 1'
+  hibernate:
+    dialect: 'org.hibernate.dialect.PostgreSQLDialect'
+    hbm2ddl.auto: 'update'
+---
+spring:
+  config:
+    activate:
+      on-profile: dev-local
+db:
+  jdbcUrl: 'jdbc:postgresql://localhost:5432/postgres'
