@@ -1,7 +1,13 @@
 spring:
   profiles:
-    active: dev-local
-db:
+    active: tests-local
+logging:
+  level.root: INFO
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %class{36}:%line - %msg%n' 
+database:
+  hibernate.dialect: 'org.hibernate.dialect.PostgreSQLDialect'
+  flyway.migration: clean-migrate
   username: 'postgres'
   password: 'postgres'
   driverClassName: 'org.postgresql.Driver'
@@ -10,13 +16,18 @@ db:
   connectionTimeout: 10000
   validationTimeout: 5000
   connectionTestQuery: 'SELECT 1'
-  hibernate:
-    dialect: 'org.hibernate.dialect.PostgreSQLDialect'
-    hbm2ddl.auto: 'update'
 ---
 spring:
   config:
     activate:
-      on-profile: dev-local
-db:
+      on-profile: tests-local
+database:
   jdbcUrl: 'jdbc:postgresql://localhost:5432/postgres'
+
+---
+spring:
+  config:
+    activate:
+      on-profile: tests-remote
+database:
+  jdbcUrl: 'jdbc:postgresql://${postgres.host}:${postgres.port}/postgres'

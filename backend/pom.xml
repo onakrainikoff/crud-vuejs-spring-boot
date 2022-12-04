@@ -8,9 +8,9 @@
     <version>3.0.0</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
-  <groupId>ru.on8off</groupId>
-  <artifactId>crud</artifactId>
-  <version>0.0.1/version>
+  <groupId>ru.on8off.crud</groupId>
+  <artifactId>backend</artifactId>
+  <version>0.0.1</version>
 
   <properties>
     <java.version>17</java.version>
@@ -24,7 +24,26 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
-
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+    <groupId>com.fasterxml.jackson.datatype</groupId>
+    <artifactId>jackson-datatype-jsr310</artifactId>
+    <version>2.6.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
+      <scope>runtime</scope>
+      <optional>true</optional>
+    </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
@@ -53,6 +72,91 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>it</id>
+      <activation>
+        <property>
+          <name>docker_host</name>
+        </property>
+      </activation>
+      <properties>
+        <docker_port>2375</docker_port>
+        <postgres_port>5432</postgres_port>
+
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>integration-test</goal>
+                  <goal>verify</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <environmentVariables>
+                <spring.profiles.active>tests-remote</spring.profiles.active>
+                <postgres_host>${docker_host}</postgres_host>
+                <postgres_port>${postgres_port}</postgres_port>
+              </environmentVariables>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>io.fabric8</groupId>
+            <artifactId>docker-maven-plugin</artifactId>
+            <version>0.38.0</version>
+            <executions>
+              <execution>
+                <id>start</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>build</goal>
+                  <goal>start</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>stop</id>
+                <phase>post-integration-test</phase>
+                <goals>
+                  <goal>stop</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <dockerHost>tcp://${docker_host}:${docker_port}</dockerHost>
+              <images>
+                <image>
+                  <name>postgres:11</name>
+                  <alias>postgresql</alias>
+                  <run>
+                    <env>
+                      <POSTGRES_USER>postgres</POSTGRES_USER>
+                      <POSTGRES_PASSWORD>postgres</POSTGRES_PASSWORD>
+                      <POSTGRES_DB>postgres</POSTGRES_DB>
+                    </env>
+
+                    <ports>
+                      <port>${postgres_port}:5432</port>
+                    </ports>
+
+                    <wait>
+                      <log>(?s)database system is ready to accept connections.*database system is ready to accept connections</log>
+                      <time>10000</time>
+                    </wait>
+                  </run>
+                </image>
+              </images>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>
 

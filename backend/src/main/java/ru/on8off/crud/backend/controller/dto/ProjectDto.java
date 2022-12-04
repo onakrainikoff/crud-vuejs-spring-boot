@@ -1,2 +1,51 @@
-package ru.on8off.crud.backend.controller.dto;public class Project {
+package ru.on8off.crud.backend.controller.dto;
+
+import java.time.ZonedDateTime;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import ru.on8off.crud.backend.repository.entity.Project;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+public class ProjectDto {
+    private Integer id;
+    private String code;
+    private String name;
+    private String color;
+    private String description;
+    private ZonedDateTime dateCreated;
+    private ZonedDateTime dateUpdated;
+
+
+    public static ProjectDto fromEntity(Project entity){
+        if(entity == null) {
+            return null;
+        }
+        var dto = new ProjectDto();
+        dto.setId(entity.getId());
+        dto.setCode(entity.getCode());
+        dto.setName(entity.getName());
+        dto.setColor(entity.getColor());
+        dto.setDescription(entity.getDescription());
+        dto.setDateCreated(entity.getDateCreated());
+        dto.setDateUpdated(entity.getDateUpdated());
+        return dto;
+    }
+
+    public Project toEntity(ProjectDto dto){
+        var entity = new Project();
+        entity.setId(dto.getId());
+        entity.setCode(dto.getCode());
+        entity.setName(dto.getName());
+        entity.setColor(dto.getColor());
+        entity.setDescription(dto.getDescription());
+        entity.setDateCreated(dto.getDateCreated());
+        entity.setDateUpdated(dto.getDateUpdated());
+        return entity;
+    }
 }
