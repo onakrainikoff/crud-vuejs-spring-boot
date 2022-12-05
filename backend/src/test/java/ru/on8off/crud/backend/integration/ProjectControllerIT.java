@@ -15,7 +15,6 @@ import org.springframework.http.HttpMethod;
 import ru.on8off.crud.backend.controller.dto.ProjectDto;
 import ru.on8off.crud.backend.fixture.ProjectFixture;
 import ru.on8off.crud.backend.repository.ProjectRepository;
-import ru.on8off.crud.backend.repository.entity.Project;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ProjectControllerIT {

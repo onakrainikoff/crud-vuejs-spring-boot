@@ -2,7 +2,6 @@ package ru.on8off.crud.backend.fixture;
 
 import ru.on8off.crud.backend.controller.dto.ProjectDto;
 import ru.on8off.crud.backend.controller.dto.ProjectRequest;
-import ru.on8off.crud.backend.repository.ProjectRepository;
 import ru.on8off.crud.backend.repository.entity.Project;
 
 
