@@ -36,16 +36,4 @@ public class ProjectDto {
         dto.setDateUpdated(entity.getDateUpdated());
         return dto;
     }
-
-    public Project toEntity(ProjectDto dto){
-        var entity = new Project();
-        entity.setId(dto.getId());
-        entity.setCode(dto.getCode());
-        entity.setName(dto.getName());
-        entity.setColor(dto.getColor());
-        entity.setDescription(dto.getDescription());
-        entity.setDateCreated(dto.getDateCreated());
-        entity.setDateUpdated(dto.getDateUpdated());
-        return entity;
-    }
 }

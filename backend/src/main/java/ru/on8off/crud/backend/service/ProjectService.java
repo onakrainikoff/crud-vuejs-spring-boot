@@ -22,7 +22,7 @@ public class ProjectService {
 
     @Transactional(readOnly = true)
     public Project get(Integer id){
-        return projectRepository.getReferenceById(id);
+        return projectRepository.findById(id).orElse(null);
     }
 
     @Transactional

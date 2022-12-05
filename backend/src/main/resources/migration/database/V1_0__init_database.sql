@@ -12,8 +12,6 @@ create unique index idx_projects_name on projects (name);
 create unique index idx_projects_date_created on projects (date_created);
 create unique index idx_projects_date_updated on projects (date_updated);
 
-insert into projects(date_created, date_updated, code, color, name, description) values(now(), now(), 'test2', '#000000', 'Тест2', 'Тестовый проект');
-
 -- create table elements(
 --                          id serial primary key not null,
 --                          date_created timestamptz not null,
