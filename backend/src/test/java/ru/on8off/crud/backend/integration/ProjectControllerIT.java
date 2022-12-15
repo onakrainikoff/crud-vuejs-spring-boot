@@ -12,6 +12,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 
+import ru.on8off.crud.backend.controller.dto.PageDto;
 import ru.on8off.crud.backend.controller.dto.ProjectDto;
 import ru.on8off.crud.backend.fixture.ProjectFixture;
 import ru.on8off.crud.backend.repository.ProjectRepository;
@@ -112,19 +113,21 @@ public class ProjectControllerIT {
 
     @Test
     void testGetAll(){
-        var response = testRestTemplate.getForEntity(url +"/projects", ProjectDto[].class);
+        var response = testRestTemplate.getForEntity(url +"/projects", PageDto.class);
         Assertions.assertEquals(200, response.getStatusCode().value());
-        
         var projects = List.of(
             ProjectFixture.projectEntity(),
             ProjectFixture.projectEntity(),
             ProjectFixture.projectEntity()
         );
         projectRepository.saveAll(projects);
-        response = testRestTemplate.getForEntity(url +"/projects?name=TEST-NAME", ProjectDto[].class);
+        response = testRestTemplate.getForEntity(url +"/projects?name=TEST-NAME&pageSize=2&pageNumber=0", PageDto.class);
         Assertions.assertEquals(200, response.getStatusCode().value());
-        var result = List.of(response.getBody());
-        Assertions.assertEquals(3, result.size());
+        var page = response.getBody();
+        Assertions.assertEquals(3, page.getTotalElements());
+        Assertions.assertEquals(0, page.getPageNumber());
+        Assertions.assertEquals(2, page.getPageSize());
+        Assertions.assertEquals(2, page.getContent().size());
     }
 
 }

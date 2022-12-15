@@ -8,9 +8,12 @@ create table projects (
     description varchar(250) not null
 );
 create unique index udx_projects_code on projects (code);
-create unique index idx_projects_name on projects (name);
-create unique index idx_projects_date_created on projects (date_created);
-create unique index idx_projects_date_updated on projects (date_updated);
+create index idx_projects_name on projects (name);
+create index idx_projects_date_created on projects (date_created);
+create index idx_projects_date_updated on projects (date_updated);
+insert into projects (date_created, date_updated, code, color, name, description) values(now(), now(), 'PROJECT-1', '#000000', 'My test project-1', 'My test project-1 description');
+insert into projects (date_created, date_updated, code, color, name, description) values(now(), now(), 'PROJECT-2', '#ff0000', 'My test project-2', 'My test project-2 description');
+insert into projects (date_created, date_updated, code, color, name, description) values(now(), now(), 'PROJECT-3', '#00ff00', 'My test project-2', 'My test project-3 description');
 
 -- create table elements(
 --                          id serial primary key not null,

@@ -12,13 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.validation.Valid;
+import ru.on8off.crud.backend.controller.dto.PageDto;
+import ru.on8off.crud.backend.controller.dto.PageRequest;
 import ru.on8off.crud.backend.controller.dto.ProjectDto;
 import ru.on8off.crud.backend.controller.dto.ProjectRequest;
 import ru.on8off.crud.backend.controller.dto.ProjectsPageRequest;
 import ru.on8off.crud.backend.service.ProjectService;
 import org.springframework.http.HttpStatusCode;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -28,29 +29,34 @@ public class ProjectController {
     private ProjectService projectService;
 
     @GetMapping("/projects")
-    public List<ProjectDto> all(ProjectsPageRequest projectsPageRequest){
+    public PageDto<ProjectDto> all(PageRequest pageRequest, ProjectsPageRequest projectsPageRequest){
         log.info("Request GET /project projectsPageRequest={}", projectsPageRequest);
-        var result = projectService.getAll(projectsPageRequest.getFilter(), projectsPageRequest.getPageRequest())
-            .stream().map(ProjectDto::fromEntity).collect(Collectors.toList());
+        var page = projectService.getAll(projectsPageRequest.getFilter(), pageRequest.getPageRequest());
+        var result = new PageDto<>(
+            page.get().map(ProjectDto::fromEntity).collect(Collectors.toList()),
+            page.getSize(),
+            page.getNumber(),
+            page.getTotalPages(),
+            page.getTotalElements()
+        );
         log.info("Response: " + result);
         return result;
     }
 
     @GetMapping("/project/{id}")
-    public ProjectDto get(@PathVariable Integer id){
+    public ProjectDto get(@PathVariable Integer id) {
         log.info("Request GET /{}", id);
         var project = projectService.get(id);
-        if(project == null) {
+        if (project == null) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404), "Project not found for id= " + id);
-         }
+        }
         var result = ProjectDto.fromEntity(project);
         log.info("Response: " + result);
         return result;
     }
 
-
     @PostMapping("/project")
-    public ProjectDto post(@Valid @RequestBody ProjectRequest projectRequest){
+    public ProjectDto post(@Valid @RequestBody ProjectRequest projectRequest) {
         log.info("Request POST /project project={}", projectRequest);
         var result = ProjectDto.fromEntity(projectService.save(projectRequest.toEntity()));
         log.info("Response: " + result);
@@ -58,11 +64,11 @@ public class ProjectController {
     }
 
     @PutMapping("/project/{id}")
-    public ProjectDto put(@PathVariable Integer id, @Valid @RequestBody ProjectRequest projectRequest){
+    public ProjectDto put(@PathVariable Integer id, @Valid @RequestBody ProjectRequest projectRequest) {
         log.info("Request PATCH /project/{} project={}", projectRequest);
         var project = projectService.get(id);
-        if(project == null) {
-           throw new ResponseStatusException(HttpStatusCode.valueOf(404), "Project not found for id= " + id);
+        if (project == null) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(404), "Project not found for id= " + id);
         }
         project = projectRequest.toEntity();
         project.setId(id);
@@ -72,11 +78,11 @@ public class ProjectController {
     }
 
     @DeleteMapping("/project/{id}")
-    public void delete(@PathVariable Integer id){
+    public void delete(@PathVariable Integer id) {
         log.info("Request DELETE /project/{}", id);
         var project = projectService.get(id);
-        if(project == null) {
-           throw new ResponseStatusException(HttpStatusCode.valueOf(404), "Project not found for id= " + id);
+        if (project == null) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(404), "Project not found for id= " + id);
         }
         projectService.delete(id);
         log.info("Response: OK");
