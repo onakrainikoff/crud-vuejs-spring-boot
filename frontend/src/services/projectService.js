@@ -5,13 +5,35 @@ const api = axios.create({
     timeout: 1000
 })
 
-async function getProjects({ pageSize, pageNumber, sortBy, sortOrder, code, name, dateCreatedFrom, dateCreatedTo, dateUpdatedFrom, dateUpdatedTo }) {
+async function getProjects({ pageSize, pageNumber, sortBy, sortOrderDesc, code, name, dateCreatedFrom, dateCreatedTo, dateUpdatedFrom, dateUpdatedTo }) {
     const response = await api({
         method: 'get',
         url: '/projects',
-        params: {pageSize, pageNumber, sortBy, sortOrder, code, name, dateCreatedFrom, dateCreatedTo, dateUpdatedFrom, dateUpdatedTo}
+        params: {pageSize, pageNumber, sortBy, sortOrderDesc, code, name, dateCreatedFrom, dateCreatedTo, dateUpdatedFrom, dateUpdatedTo}
     })
     return response.data
 }
 
-export default { getProjects }
+async function addProject({code, name, description}){
+    const response = await api({
+        method: 'post',
+        url: '/project',
+        data: {
+            code, name, description
+        }
+    })
+    return response
+}
+
+async function editProject({id, code, name, description}){
+    const response = await api({
+        method: 'put',
+        url: `/project/${id}`,
+        data: {
+            code, name, description
+        }
+    })
+    return response
+}
+
+export default { getProjects, addProject, editProject }

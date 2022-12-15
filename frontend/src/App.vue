@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import ProjectsPage from './pages/ProjectsPage'
+import ProjectsPage from './pages/projects/ProjectsPage'
 
 export default {
   name: 'App',

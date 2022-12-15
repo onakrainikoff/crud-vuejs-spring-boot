@@ -1,6 +1,5 @@
 <template>
   <div class="wrapper">
-
     <!--Management Block-->
     <div class="management-block bg-secondary">
 
@@ -16,7 +15,7 @@
         <b-icon icon="filter" aria-hidden="true"></b-icon>
       </b-button>
 
-      <b-button>
+      <b-button @click="addItem">
         <b-icon icon="plus" aria-hidden="true"></b-icon>
       </b-button>
     </div>
@@ -25,7 +24,6 @@
     <b-collapse class="filters-block text-secondary" v-model="filters.visible">
       <b-container fluid>
         <b-row>
-
           <b-col>
             <b-form-group label="Name:" size="sm">
               <b-form-input v-model="filters.name" trim placeholder="Enter name" size="sm"
@@ -58,7 +56,6 @@
               <DataTimePicker v-model:datetime="filters.dateUpdatedTo" ref="updatedTo" />
             </b-form-group>
           </b-col>
-
         </b-row>
       </b-container>
     </b-collapse>
@@ -79,32 +76,37 @@
         {{ dateFormate(data.value) }}
       </template>
 
-      <template #cell(color)="data">
-        <div class="color-circl" v-bind:style="{ backgroundColor: data.value }">
-        </div>
+      <template #cell(action)="data">
+        <b-button @click="() => editItem(data.item)" size="sm" >
+          <b-icon icon="pencil" aria-hidden="true"></b-icon>
+        </b-button>
       </template>
 
     </b-table>
-    
-    <!--Pagination Block-->
-    <b-pagination
-      v-model="table.pageNumber"
 
-    ></b-pagination>
+    <!--Pagination Block-->
+    <b-pagination align="center" v-model="table.pageNumber" :per-page="table.pageSize"
+      :total-rows="table.totalElements"></b-pagination>
+
+    <!--Modals Block-->
+    <ProjectAddEditModal ref="addEditModal" @success="reloadItems"/>
+
   </div>
 
 </template>
 
 <script>
-import projectService from '@/services/projectService';
+import projectService from '@/services/ProjectService';
 import DataTimePicker from '@/components/DateTimePicker.vue';
+import ProjectAddEditModal from '@/pages/projects/ProjectAddEditModal.vue';
 
 export default {
   name: 'ProjectsPage',
+
   data() {
     return {
       filters: {
-        visible: true,
+        visible: false,
         code: null,
         name: null,
         dateCreatedFrom: null,
@@ -114,10 +116,11 @@ export default {
       },
       table: {
         busy: true,
-        pageNumber: 0,
-        pageSize: 50,
+        pageNumber: 1,
+        pageSize: 10,
+        totalElements: 0,
         sortBy: 'dateCreated',
-        sortDesc: false,
+        sortDesc: true,
         fields: [
           {
             key: 'id',
@@ -135,11 +138,6 @@ export default {
             sortable: true,
           },
           {
-            key: 'color',
-            label: 'Color',
-            sortable: true,
-          },
-          {
             key: 'code',
             label: 'Code',
             sortable: true,
@@ -149,18 +147,22 @@ export default {
             label: 'Name',
             sortable: true
           },
-          'description'
+          'description',
+          {
+            key: 'action',
+            label: '#',
+          },
         ],
         items: []
       }
-
     }
   },
+
   mounted() {
     this.reloadItems()
   },
-  methods: {
 
+  methods: {
     changeFiltersVisibility() {
       this.filters.visible = !this.filters.visible
     },
@@ -190,9 +192,9 @@ export default {
       this.table.busy = true
       projectService.getProjects({
         pageSize: this.table.pageSize,
-        pageNumber: this.table.pageNumber,
+        pageNumber: this.table.pageNumber - 1,
         sortBy: this.table.sortBy,
-        sortOrder: this.table.sortDesc ? 'DESC' : 'ASC',
+        sortOrderDesc: this.table.sortDesc,
         code: this.filters.code,
         name: this.filters.name,
         dateCreatedFrom: this.filters.dateCreatedFrom,
@@ -200,19 +202,34 @@ export default {
         dateUpdatedFrom: this.filters.dateUpdatedFrom,
         dateUpdatedTo: this.filters.dateUpdatedTo
       }).then((data) => {
-        this.table.items = data
+        this.table.items = data.content
+        this.table.totalElements = data.totalElements
         this.table.busy = false
       })
+    },
+
+    addItem() {
+      this.$refs.addEditModal.showAddModal()
+    },
+
+    editItem(item) {
+      this.$refs.addEditModal.showEditModal(item)
     }
+
   },
 
   watch: {
     'table.sortDesc'() {
       this.reloadItems()
+    },
+
+    'table.pageNumber'() {
+      this.reloadItems()
     }
   },
   components: {
-    DataTimePicker
+    DataTimePicker,
+    ProjectAddEditModal
   }
 }
 </script>
@@ -235,14 +252,6 @@ export default {
 
 .table-block {
   text-align: center;
-}
-
-.color-circl {
-  display: block;
-  height: 30px;
-  width: 30px;
-  border-radius: 50%;
-  margin: 0 auto;
 }
 
 .header {

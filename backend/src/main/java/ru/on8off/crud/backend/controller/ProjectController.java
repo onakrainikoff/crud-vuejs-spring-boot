@@ -16,7 +16,7 @@ import ru.on8off.crud.backend.controller.dto.PageDto;
 import ru.on8off.crud.backend.controller.dto.PageRequest;
 import ru.on8off.crud.backend.controller.dto.ProjectDto;
 import ru.on8off.crud.backend.controller.dto.ProjectRequest;
-import ru.on8off.crud.backend.controller.dto.ProjectsPageRequest;
+import ru.on8off.crud.backend.controller.dto.ProjectsFilterRequest;
 import ru.on8off.crud.backend.service.ProjectService;
 import org.springframework.http.HttpStatusCode;
 
@@ -29,9 +29,9 @@ public class ProjectController {
     private ProjectService projectService;
 
     @GetMapping("/projects")
-    public PageDto<ProjectDto> all(PageRequest pageRequest, ProjectsPageRequest projectsPageRequest){
-        log.info("Request GET /project projectsPageRequest={}", projectsPageRequest);
-        var page = projectService.getAll(projectsPageRequest.getFilter(), pageRequest.getPageRequest());
+    public PageDto<ProjectDto> all(PageRequest pageRequest, ProjectsFilterRequest projectsFilterRequest){
+        log.info("Request GET /project pageRequest={} projectsFilterRequest={}", pageRequest, projectsFilterRequest);
+        var page = projectService.getAll(projectsFilterRequest.getFilter(), pageRequest.getPageRequest());
         var result = new PageDto<>(
             page.get().map(ProjectDto::fromEntity).collect(Collectors.toList()),
             page.getSize(),

@@ -21,9 +21,6 @@ public class ProjectRequest{
     @Size(max = 100)
     private String name;
     @NotBlank
-    @Pattern(regexp="^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$")
-    private String color;
-    @NotBlank
     @Size(max = 250)
     private String description;
 
@@ -32,7 +29,6 @@ public class ProjectRequest{
         var entity = new Project();
         entity.setCode(this.getCode());
         entity.setName(this.getName());
-        entity.setColor(this.getColor());
         entity.setDescription(this.getDescription());
         return entity;
     }

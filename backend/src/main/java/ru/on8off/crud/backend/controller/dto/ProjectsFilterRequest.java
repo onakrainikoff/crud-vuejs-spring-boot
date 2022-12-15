@@ -11,7 +11,7 @@ import ru.on8off.crud.backend.repository.filter.ProjectsFilter;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ProjectsPageRequest {
+public class ProjectsFilterRequest {
     private String code;
     private String name;
     private ZonedDateTime dateCreatedFrom;

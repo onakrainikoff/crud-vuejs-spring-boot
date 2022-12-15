@@ -16,7 +16,6 @@ public class ProjectDto {
     private Integer id;
     private String code;
     private String name;
-    private String color;
     private String description;
     private ZonedDateTime dateCreated;
     private ZonedDateTime dateUpdated;
@@ -30,7 +29,6 @@ public class ProjectDto {
         dto.setId(entity.getId());
         dto.setCode(entity.getCode());
         dto.setName(entity.getName());
-        dto.setColor(entity.getColor());
         dto.setDescription(entity.getDescription());
         dto.setDateCreated(entity.getDateCreated());
         dto.setDateUpdated(entity.getDateUpdated());

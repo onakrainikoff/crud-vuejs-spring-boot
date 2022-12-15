@@ -15,7 +15,6 @@ public class ProjectFixture {
         var entity = new Project();
         entity.setCode("TEST-CODE-" + random.nextInt());
         entity.setName("TEST-NAME-" + random.nextInt());
-        entity.setColor("#000000");
         entity.setDescription("TEST-DESCRIPRION-" + random.nextInt());
         return entity;
     }
@@ -28,7 +27,6 @@ public class ProjectFixture {
         var request = new ProjectRequest();
         request.setCode("TEST-CODE-" + random.nextInt());
         request.setName("TEST-NAME-" + random.nextInt());
-        request.setColor("#000000");
         request.setDescription("TEST-DESCRIPRION-" + random.nextInt());
         return request;
     }
