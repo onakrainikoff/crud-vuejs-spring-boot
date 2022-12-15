@@ -66,12 +66,13 @@ public class ProjectController {
     @PutMapping("/project/{id}")
     public ProjectDto put(@PathVariable Integer id, @Valid @RequestBody ProjectRequest projectRequest) {
         log.info("Request PATCH /project/{} project={}", projectRequest);
-        var project = projectService.get(id);
-        if (project == null) {
+        var oldProject = projectService.get(id);
+        if (oldProject == null) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404), "Project not found for id= " + id);
         }
-        project = projectRequest.toEntity();
+        var project = projectRequest.toEntity();
         project.setId(id);
+        project.setDateCreated(oldProject.getDateCreated());
         var result = ProjectDto.fromEntity(projectService.save(project));
         log.info("Response: " + result);
         return result;
