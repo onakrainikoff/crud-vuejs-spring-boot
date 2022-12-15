@@ -32,3 +32,27 @@ cd frontend
 #run frontend
 npm run serve
 ```
+
+## Run in Docker
+
+### Build Backend
+```
+cd backend
+mvn clean install -Ddocker_host=localhost
+```
+
+### Build Frontend
+```
+cd frontend
+npm run build-docker
+```
+
+### Run Docker-compose
+```
+docker-compose up -d
+```
+
+### Open Browser
+```
+http://localhost:80/ 
+```

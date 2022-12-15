@@ -282,7 +282,6 @@ export default {
 }
 
 .action-btn {
-  /* border: 2px solid red; */
   margin: 0 2px;
 }
 </style>
