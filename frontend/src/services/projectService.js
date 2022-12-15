@@ -36,4 +36,12 @@ async function editProject({id, code, name, description}){
     return response
 }
 
-export default { getProjects, addProject, editProject }
+async function deleteProject({id}){
+    const response = await api({
+        method: 'delete',
+        url: `/project/${id}`
+    })
+    return response
+}
+
+export default { getProjects, addProject, editProject, deleteProject }

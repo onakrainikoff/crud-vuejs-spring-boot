@@ -2,15 +2,6 @@
   <div class="wrapper">
     <!--Management Block-->
     <div class="management-block bg-secondary">
-
-      <b-button @click="resetFilters" v-if="filters.visible" class="text-warning">
-        <b-icon icon="x-circle" aria-hidden="true"></b-icon>
-      </b-button>
-
-      <b-button @click="reloadItems" v-if="filters.visible" class="text-success">
-        <b-icon icon="search" aria-hidden="true"></b-icon>
-      </b-button>
-
       <b-button @click="changeFiltersVisibility">
         <b-icon icon="filter" aria-hidden="true"></b-icon>
       </b-button>
@@ -57,6 +48,20 @@
             </b-form-group>
           </b-col>
         </b-row>
+        <b-row>
+          <b-col>
+            <b-button class="float-right action-btn" @click="reloadItems" v-if="filters.visible" size="sm"
+              variant="primary">
+              <b-icon icon="search" aria-hidden="true"></b-icon>
+            </b-button>
+
+            <b-button class="float-right action-btn" @click="resetFilters" v-if="filters.visible" size="sm"
+              variant="danger">
+              <b-icon icon="x-circle" aria-hidden="true"></b-icon>
+            </b-button>
+          </b-col>
+        </b-row>
+
       </b-container>
     </b-collapse>
 
@@ -77,8 +82,11 @@
       </template>
 
       <template #cell(action)="data">
-        <b-button @click="() => editItem(data.item)" size="sm" >
+        <b-button class="action-btn" @click="() => editItem(data.item)" size="sm" variant="outline-secondary">
           <b-icon icon="pencil" aria-hidden="true"></b-icon>
+        </b-button>
+        <b-button class="action-btn" @click="() => deleteItem(data.item)" size="sm" variant="outline-secondary">
+          <b-icon icon="trash" aria-hidden="true"></b-icon>
         </b-button>
       </template>
 
@@ -89,8 +97,7 @@
       :total-rows="table.totalElements"></b-pagination>
 
     <!--Modals Block-->
-    <ProjectAddEditModal ref="addEditModal" @success="reloadItems"/>
-
+    <ProjectAddEditModal ref="addEditModal" @success="reloadItems" />
   </div>
 
 </template>
@@ -214,6 +221,26 @@ export default {
 
     editItem(item) {
       this.$refs.addEditModal.showEditModal(item)
+    },
+
+    deleteItem(item) {
+      this.$bvModal.msgBoxConfirm(`Are you sure you want to delete project #${item.id}?`, {
+        title: `Delete project #${item.id}`,
+        okVariant: 'danger',
+        okTitle: 'Delete',
+        cancelTitle: 'Cancel',
+        centered: true
+      }).then(value => {
+        if(value) {
+          projectService.deleteProject({id: item.id})
+            .then(()=>{
+              this.reloadItems()
+            })
+            .catch(error => {
+              console.log(JSON.stringify(error));
+            })
+        }
+      })
     }
 
   },
@@ -254,9 +281,8 @@ export default {
   text-align: center;
 }
 
-.header {
-  background-color: #000;
-  width: 100%;
-  height: 50px;
+.action-btn {
+  /* border: 2px solid red; */
+  margin: 0 2px;
 }
 </style>
