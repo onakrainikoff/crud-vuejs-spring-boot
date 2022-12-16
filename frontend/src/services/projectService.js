@@ -22,7 +22,7 @@ async function addProject({code, name, description}){
             code, name, description
         }
     })
-    return response
+    return response.data
 }
 
 async function editProject({id, code, name, description}){
@@ -33,7 +33,7 @@ async function editProject({id, code, name, description}){
             code, name, description
         }
     })
-    return response
+    return response.data
 }
 
 async function deleteProject({id}){

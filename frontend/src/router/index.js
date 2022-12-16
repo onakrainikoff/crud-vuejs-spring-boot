@@ -1,17 +1,20 @@
-import {createRouter, createWebHistory} from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import ProjectsPage from "../views/projects/ProjectsPage.vue"
-import TasksPage from "../views/tasks/TasksPage.vue"
+import AboutPage from "../views/about/AboutPage.vue"
 
 const routes = [
     {
-        path: '/',
+        path: '/', redirect: { name: 'projects' }
+    },
+    {
+        path: '/projects',
         name: 'projects',
         component: ProjectsPage
     },
     {
-        path: '/tasks', 
-        name: 'tasks',
-        component: TasksPage
+        path: '/about',
+        name: 'about',
+        component: AboutPage
     },
 ]
 

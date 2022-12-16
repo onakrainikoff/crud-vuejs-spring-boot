@@ -13,15 +13,3 @@ create index idx_projects_date_updated on projects (date_updated);
 insert into projects (date_created, date_updated, code, name, description) values(now(), now(), 'PROJECT-1', 'My test project-1', 'My test project-1 description');
 insert into projects (date_created, date_updated, code, name, description) values(now(), now(), 'PROJECT-2', 'My test project-2', 'My test project-2 description');
 insert into projects (date_created, date_updated, code, name, description) values(now(), now(), 'PROJECT-3', 'My test project-3', 'My test project-3 description');
-
--- create table elements(
---                          id serial primary key not null,
---                          date_created timestamptz not null,
---                          element_group integer not null,
---                          name varchar(500) not null,
---                          params hstore,
---                          tags varchar[],
---                          items jsonb,
---                          constraint elements_to_element_groups foreign key (element_group) references element_groups(id)
--- );
--- create index idx_elements_name on elements (name);

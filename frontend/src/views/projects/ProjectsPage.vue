@@ -1,9 +1,16 @@
 <template>
   <div class="wrapper">
-    <!--Management Block-->
-    <div class="management-block bg-info">
-      <div class="label h5 text-light">Projects:</div>
-      <b-button @click="changeFiltersVisibility" variant="dark" class="action-btn">
+    <!--Header block-->
+    <div class="header-block">
+      <b-breadcrumb class="header">
+        <b-breadcrumb-item href="/">
+          <b-icon icon="house-fill" scale="1.25" shift-v="1.25" aria-hidden="true"></b-icon>
+          Main
+        </b-breadcrumb-item>
+        <b-breadcrumb-item active>Projects</b-breadcrumb-item>
+      </b-breadcrumb>
+
+      <b-button @click="togleFilters" variant="dark" class="action-btn">
         <b-icon icon="filter" aria-hidden="true"></b-icon>
       </b-button>
 
@@ -94,8 +101,8 @@
     </b-table>
 
     <!--Pagination Block-->
-    <b-pagination align="center" v-model="table.pageNumber" :per-page="table.pageSize"
-      :total-rows="table.totalElements"></b-pagination>
+    <b-pagination align="center" v-model="table.pagination.pageNumber" :per-page="table.pagination.pageSize"
+      :total-rows="table.pagination.totalElements"></b-pagination>
 
     <!--Modals Block-->
     <ProjectAddEditModal ref="addEditModal" @success="reloadItems" />
@@ -124,11 +131,18 @@ export default {
       },
       table: {
         busy: true,
-        pageNumber: 1,
-        pageSize: 10,
-        totalElements: 0,
-        sortBy: 'dateCreated',
-        sortDesc: true,
+
+        sorting: {
+          sortBy: 'dateCreated',
+          sortDesc: true
+        },
+
+        pagination: {
+          pageNumber: 1,
+          pageSize: 10,
+          totalElements: 0
+        },
+
         fields: [
           {
             key: 'id',
@@ -161,6 +175,7 @@ export default {
             label: '#',
           },
         ],
+
         items: []
       }
     }
@@ -171,7 +186,7 @@ export default {
   },
 
   methods: {
-    changeFiltersVisibility() {
+    togleFilters() {
       this.filters.visible = !this.filters.visible
     },
 
@@ -191,18 +206,13 @@ export default {
       this.$refs.updatedTo.reset()
     },
 
-    dateFormate(date) {
-      const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: "numeric", minute: "numeric", second: "numeric" }
-      return new Date(date).toLocaleDateString("ru", options)
-    },
-
     reloadItems() {
       this.table.busy = true
       projectService.getProjects({
-        pageSize: this.table.pageSize,
-        pageNumber: this.table.pageNumber - 1,
-        sortBy: this.table.sortBy,
-        sortOrderDesc: this.table.sortDesc,
+        pageSize: this.table.pagination.pageSize,
+        pageNumber: this.table.pagination.pageNumber - 1,
+        sortBy: this.table.sorting.sortBy,
+        sortOrderDesc: this.table.sorting.sortDesc,
         code: this.filters.code,
         name: this.filters.name,
         dateCreatedFrom: this.filters.dateCreatedFrom,
@@ -211,8 +221,11 @@ export default {
         dateUpdatedTo: this.filters.dateUpdatedTo
       }).then((data) => {
         this.table.items = data.content
-        this.table.totalElements = data.totalElements
+        this.table.pagination.totalElements = data.totalElements
         this.table.busy = false
+      }).catch(error => {
+        console.log(JSON.stringify(error));
+        this.$store.dispatch('addErrorAlert', { message: "Error: " + error.message ?? error })
       })
     },
 
@@ -232,18 +245,24 @@ export default {
         cancelTitle: 'Cancel',
         centered: true
       }).then(value => {
-        if(value) {
-          projectService.deleteProject({id: item.id})
-            .then(()=>{
+        if (value) {
+          projectService.deleteProject({ id: item.id })
+            .then(() => {
               this.reloadItems()
+              this.$store.dispatch('addSuccessAlert', { message: `Project #${item.id} deleted` })
             })
             .catch(error => {
               console.log(JSON.stringify(error));
+              this.$store.dispatch('addErrorAlert', { message: "Error: " + error.message ?? error })
             })
         }
       })
-    }
+    },
 
+    dateFormate(date) {
+      const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: "numeric", minute: "numeric", second: "numeric" }
+      return new Date(date).toLocaleDateString("ru", options)
+    }
   },
 
   watch: {
@@ -255,6 +274,7 @@ export default {
       this.reloadItems()
     }
   },
+
   components: {
     DataTimePicker,
     ProjectAddEditModal
@@ -272,15 +292,16 @@ export default {
   padding: 15px;
 }
 
-.management-block {
+.header-block {
   display: flex;
   justify-content: right;
   align-items: center;
   padding: 2px 0;
+  background-color: #E9ECEF;
 }
-.label{
+.header-block .header {
   width: 100%;
-  padding: 0 15px;
+  margin: 0;
 }
 
 .table-block {

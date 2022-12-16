@@ -26,7 +26,6 @@
                 {{ okButton }}
             </b-button>
         </template>
-
     </b-modal>
 </template>
 
@@ -137,7 +136,8 @@ export default {
                     description: this.field.description.value
                 })
             }
-            promise.then(() => {
+            promise.then((result) => {
+                this.$store.dispatch('addSuccessAlert', {message: `Project #${result.id} ${this.id !== null ? 'edited': 'created'}`})
                 this.$emit('success')
                 this.hide()
             }).catch(error => {
@@ -192,6 +192,4 @@ export default {
         },
     }
 }
-
-
 </script>
