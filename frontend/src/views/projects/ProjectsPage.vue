@@ -105,7 +105,7 @@
       :total-rows="table.pagination.totalElements"></b-pagination>
 
     <!--Modals Block-->
-    <ProjectAddEditModal ref="addEditModal" @success="reloadItems" />
+    <ProjectModal ref="addEditModal" @success="reloadItems" />
   </div>
 
 </template>
@@ -113,7 +113,7 @@
 <script>
 import projectService from '@/services/ProjectService';
 import DataTimePicker from '@/components/DateTimePicker.vue';
-import ProjectAddEditModal from '@/views/projects/ProjectAddEditModal.vue';
+import ProjectModal from '@/views/projects/ProjectModal.vue';
 
 export default {
   name: 'ProjectsPage',
@@ -277,7 +277,7 @@ export default {
 
   components: {
     DataTimePicker,
-    ProjectAddEditModal
+    ProjectModal
   }
 }
 </script>
