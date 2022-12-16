@@ -75,7 +75,7 @@
 
     <!--Table Block-->
     <b-table class="table-block" striped hover no-local-sorting show-empty :busy="table.busy" :items="table.items"
-      :fields="table.fields" v-model:sort-by="table.sortBy" v-model:sort-desc="table.sortDesc">
+      :fields="table.fields" v-model:sort-by="table.sorting.sortBy" v-model:sort-desc="table.sorting.sortDesc">
 
       <template #empty>
         Projects not founded
@@ -266,11 +266,11 @@ export default {
   },
 
   watch: {
-    'table.sortDesc'() {
+    'table.sorting.sortDesc'() {
       this.reloadItems()
     },
 
-    'table.pageNumber'() {
+    'table.pagination.pageNumber'() {
       this.reloadItems()
     }
   },
