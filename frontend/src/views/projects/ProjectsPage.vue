@@ -206,12 +206,9 @@ export default {
     },
 
     saveFilters() {
-      let patch = null
+      let patch = {}
       Object.keys(this.filters).forEach(key => {
         const filter = this.filters[key]
-        const query = this.$route.query[key]
-        if (filter !== query) {
-          patch = patch ?? {}
           if (filter !== null) {
             if (key.startsWith('date')) {
               patch[key] = filter.getTime()
@@ -219,11 +216,8 @@ export default {
               patch[key] = filter
             }
           }
-        }
       })
-      if(patch !== null) {
-        this.$router.push({ query: patch })
-      }
+      this.$router.push({ query: patch })
     },
 
     togleFilters() {
