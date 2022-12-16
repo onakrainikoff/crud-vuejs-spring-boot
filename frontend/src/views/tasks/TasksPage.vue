@@ -1,12 +1,13 @@
 <template>
   <div class="wrapper">
     <!--Management Block-->
-    <div class="management-block bg-secondary">
-      <b-button @click="changeFiltersVisibility">
+    <div class="management-block bg-info">
+      <div class="label h5 text-light">Tasks:</div>
+      <b-button @click="changeFiltersVisibility" variant="dark" class="action-btn">
         <b-icon icon="filter" aria-hidden="true"></b-icon>
       </b-button>
 
-      <b-button @click="addItem">
+      <b-button @click="addItem" variant="dark" class="action-btn">
         <b-icon icon="plus" aria-hidden="true"></b-icon>
       </b-button>
     </div>
@@ -66,7 +67,7 @@
     </b-collapse>
 
     <!--Table Block-->
-    <b-table class="table-block" striped hover no-local-sorting show-empty :busy="table.busy" :items="table.items"
+    <!-- <b-table class="table-block" striped hover no-local-sorting show-empty :busy="table.busy" :items="table.items"
       :fields="table.fields" v-model:sort-by="table.sortBy" v-model:sort-desc="table.sortDesc">
 
       <template #empty>
@@ -90,7 +91,7 @@
         </b-button>
       </template>
 
-    </b-table>
+    </b-table> -->
 
     <!--Pagination Block-->
     <b-pagination align="center" v-model="table.pageNumber" :per-page="table.pageSize"
@@ -105,7 +106,7 @@
 <script>
 import projectService from '@/services/ProjectService';
 import DataTimePicker from '@/components/DateTimePicker.vue';
-import ProjectAddEditModal from '@/pages/projects/ProjectAddEditModal.vue';
+import ProjectAddEditModal from '@/views/projects/ProjectAddEditModal.vue';
 
 export default {
   name: 'ProjectsPage',
@@ -274,7 +275,12 @@ export default {
 .management-block {
   display: flex;
   justify-content: right;
+  align-items: center;
   padding: 2px 0;
+}
+.label{
+  width: 100%;
+  padding: 0 15px;
 }
 
 .table-block {
