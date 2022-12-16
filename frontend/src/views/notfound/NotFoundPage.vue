@@ -7,12 +7,11 @@
           <b-icon icon="house-fill" scale="1.25" shift-v="1.25" aria-hidden="true"></b-icon>
           Main
         </b-breadcrumb-item>
-        <b-breadcrumb-item active>About</b-breadcrumb-item>
       </b-breadcrumb>
     </div>
 
     <div class="text">
-      This is a study project on working with BootStrap + VueJS + SpringBoot
+      Page not found
     </div>
   </div>
 </template>

@@ -20,7 +20,7 @@
     </div>
 
     <!--Filters Block-->
-    <b-collapse class="filters-block text-secondary" v-model="filters.visible">
+    <b-collapse class="filters-block text-secondary" v-model="filtersVisible">
       <b-container fluid>
         <b-row>
           <b-col>
@@ -58,12 +58,12 @@
         </b-row>
         <b-row>
           <b-col>
-            <b-button class="float-right action-btn" @click="reloadItems" v-if="filters.visible" size="sm"
+            <b-button class="float-right action-btn" @click="reloadItems" v-if="filtersVisible" size="sm"
               variant="primary">
               <b-icon icon="search" aria-hidden="true"></b-icon>
             </b-button>
 
-            <b-button class="float-right action-btn" @click="resetFilters" v-if="filters.visible" size="sm"
+            <b-button class="float-right action-btn" @click="resetFilters" v-if="filtersVisible" size="sm"
               variant="danger">
               <b-icon icon="x-circle" aria-hidden="true"></b-icon>
             </b-button>
@@ -120,8 +120,8 @@ export default {
 
   data() {
     return {
+      filtersVisible: false,
       filters: {
-        visible: false,
         code: null,
         name: null,
         dateCreatedFrom: null,
@@ -182,17 +182,56 @@ export default {
   },
 
   mounted() {
+    this.setUpFilters()
+    Object.keys(this.filters).forEach(key => {
+      this.$watch(`filters.${key}`, () => this.saveFilters())
+    })
     this.reloadItems()
   },
 
   methods: {
+    setUpFilters() {
+      let visible = false
+      Object.keys(this.filters).forEach(key => {
+        if (this.$route.query[key]) {
+          if (key.startsWith('date')) {
+            this.filters[key] = new Date(Number(this.$route.query[key]))
+          } else {
+            this.filters[key] = this.$route.query[key]
+          }
+          visible = true
+        }
+      })
+      this.filtersVisible = visible
+    },
+
+    saveFilters() {
+      let patch = null
+      Object.keys(this.filters).forEach(key => {
+        const filter = this.filters[key]
+        const query = this.$route.query[key]
+        if (filter !== query) {
+          patch = patch ?? {}
+          if (filter !== null) {
+            if (key.startsWith('date')) {
+              patch[key] = filter.getTime()
+            } else {
+              patch[key] = filter
+            }
+          }
+        }
+      })
+      if(patch !== null) {
+        this.$router.push({ query: patch })
+      }
+    },
+
     togleFilters() {
-      this.filters.visible = !this.filters.visible
+      this.filtersVisible = !this.filtersVisible
     },
 
     resetFilters() {
       this.filters = {
-        visible: this.filters.visible,
         code: null,
         name: null,
         dateCreatedFrom: null,
@@ -265,6 +304,7 @@ export default {
     }
   },
 
+
   watch: {
     'table.sorting.sortDesc'() {
       this.reloadItems()
@@ -272,7 +312,7 @@ export default {
 
     'table.pagination.pageNumber'() {
       this.reloadItems()
-    }
+    },
   },
 
   components: {
@@ -299,6 +339,7 @@ export default {
   padding: 2px 0;
   background-color: #E9ECEF;
 }
+
 .header-block .header {
   width: 100%;
   margin: 0;
