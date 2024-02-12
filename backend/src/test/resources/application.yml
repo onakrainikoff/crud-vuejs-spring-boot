@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: tests-local
+    active: tests
 logging:
   level.root: INFO
   pattern:
@@ -20,14 +20,6 @@ database:
 spring:
   config:
     activate:
-      on-profile: tests-local
+      on-profile: tests
 database:
   jdbcUrl: 'jdbc:postgresql://localhost:5432/postgres'
-
----
-spring:
-  config:
-    activate:
-      on-profile: tests-remote
-database:
-  jdbcUrl: 'jdbc:postgresql://${postgres.host}:${postgres.port}/postgres'

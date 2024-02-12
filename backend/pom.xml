@@ -79,17 +79,7 @@
 
   <profiles>
     <profile>
-      <id>it</id>
-      <activation>
-        <property>
-          <name>docker_host</name>
-        </property>
-      </activation>
-      <properties>
-        <docker_port>2375</docker_port>
-        <postgres_port>5432</postgres_port>
-
-      </properties>
+      <id>docker</id>
       <build>
         <plugins>
           <plugin>
@@ -102,13 +92,6 @@
                 </goals>
               </execution>
             </executions>
-            <configuration>
-              <environmentVariables>
-                <spring.profiles.active>tests-remote</spring.profiles.active>
-                <postgres_host>${docker_host}</postgres_host>
-                <postgres_port>${postgres_port}</postgres_port>
-              </environmentVariables>
-            </configuration>
           </plugin>
           <plugin>
             <groupId>io.fabric8</groupId>
@@ -132,7 +115,6 @@
               </execution>
             </executions>
             <configuration>
-              <dockerHost>tcp://${docker_host}:${docker_port}</dockerHost>
               <images>
                 <image>
                   <name>postgres:11</name>
@@ -145,7 +127,7 @@
                     </env>
 
                     <ports>
-                      <port>${postgres_port}:5432</port>
+                      <port>5432:5432</port>
                     </ports>
 
                     <wait>

@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev-local
+    active: dev
 logging:
   level.root: INFO
   pattern:
@@ -21,6 +21,6 @@ database:
 spring:
   config:
     activate:
-      on-profile: dev-local
+      on-profile: dev
 database:
   jdbcUrl: 'jdbc:postgresql://localhost:5432/postgres'

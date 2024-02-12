@@ -7,10 +7,10 @@
 cd backend
 
 #run db
-mvn docker:run -Ddocker_host=localhost
+mvn docker:run -Pdocker
 
 #stop db
-mvn docker:stop -Ddocker_host=localhost
+mvn docker:stop -Pdocker
 ```
 
 ### Backend
@@ -21,7 +21,7 @@ cd backend
 mvn spring-boot:run
 
 #run tests
-mvn clean verify -Ddocker_host=localhost
+mvn clean verify -Pdocker
 ```
 
 ### Frontend
@@ -37,7 +37,7 @@ npm run serve
 ### Build Backend
 ```
 cd backend
-mvn clean install -Ddocker_host=localhost
+mvn clean install -Pdocker
 ```
 
 ### Build Frontend
