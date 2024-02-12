@@ -10,20 +10,20 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
-import ru.on8off.crud.backend.repository.entity.Project;
+import ru.on8off.crud.backend.repository.entity.KVObject;
 
-public class ProjectsFilter implements Specification<Project>{
-    private String code;
-    private String name;
+public class KVObjectFilter implements Specification<KVObject>{
+    private String key;
+    private String value;
     private ZonedDateTime dateCreatedFrom;
     private ZonedDateTime dateCreatedTo;
     private ZonedDateTime dateUpdatedFrom;
     private ZonedDateTime dateUpdatedTo;
 
-    public ProjectsFilter(String code, String name, ZonedDateTime dateCreatedFrom, ZonedDateTime dateCreatedTo,
+    public KVObjectFilter(String key, String value, ZonedDateTime dateCreatedFrom, ZonedDateTime dateCreatedTo,
             ZonedDateTime dateUpdatedFrom, ZonedDateTime dateUpdatedTo) {
-        this.code = code;
-        this.name = name;
+        this.key = key;
+        this.value = value;
         this.dateCreatedFrom = dateCreatedFrom;
         this.dateCreatedTo = dateCreatedTo;
         this.dateUpdatedFrom = dateUpdatedFrom;
@@ -31,22 +31,22 @@ public class ProjectsFilter implements Specification<Project>{
     }
 
     @Override
-    public Predicate toPredicate(Root<Project> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+    public Predicate toPredicate(Root<KVObject> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         List<Predicate> predicates = new ArrayList<>();
 
-        if(code!=null && !code.isEmpty()) {
+        if(key!=null && !key.isEmpty()) {
             predicates.add(
                 cb.like(
-                    root.<String>get("code"),
-                    (code.contains("%") || code.contains("_")) ? code: "%" + code + "%"
+                    root.<String>get("key"),
+                    (key.contains("%") || key.contains("_")) ? key: "%" + key + "%"
                 )
             );   
         }
-        if(name!=null && !name.isEmpty()){
+        if(value!=null && !value.isEmpty()){
             predicates.add(
                 cb.like(
                     root.<String>get("name"),
-                    (name.contains("%") || name.contains("_")) ? name :  "%" + name + "%"
+                    (value.contains("%") || value.contains("_")) ? value :  "%" + value + "%"
                 )
             );
         }

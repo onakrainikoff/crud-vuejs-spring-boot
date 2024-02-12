@@ -1,15 +1,14 @@
-create table projects (
+create table kv_objects (
     id serial,
     date_created timestamptz not null,
     date_updated timestamptz not null,
-    code varchar(50) not null,
-    name varchar(100) not null,
-    description varchar(250) not null
+    key varchar(1000) not null,
+    value text
 );
-create unique index udx_projects_code on projects (code);
-create index idx_projects_name on projects (name);
-create index idx_projects_date_created on projects (date_created);
-create index idx_projects_date_updated on projects (date_updated);
-insert into projects (date_created, date_updated, code, name, description) values(now(), now(), 'PROJECT-1', 'My test project-1', 'My test project-1 description');
-insert into projects (date_created, date_updated, code, name, description) values(now(), now(), 'PROJECT-2', 'My test project-2', 'My test project-2 description');
-insert into projects (date_created, date_updated, code, name, description) values(now(), now(), 'PROJECT-3', 'My test project-3', 'My test project-3 description');
+create unique index udx_kv_objects_key on kv_objects (key);
+
+create index idx_kv_objects_date_created on kv_objects (date_created);
+create index idx_kv_objects_date_updated on kv_objects (date_updated);
+insert into kv_objects (date_created, date_updated, key, value) values(now(), now(), 'OBJECT-1', 'My test OBJECT-1 value');
+insert into kv_objects (date_created, date_updated, key, value) values(now(), now(), 'OBJECT-2', 'My test OBJECT-2 value');
+insert into kv_objects (date_created, date_updated, key, value) values(now(), now(), 'OBJECT-3', 'My test OBJECT-3 value');

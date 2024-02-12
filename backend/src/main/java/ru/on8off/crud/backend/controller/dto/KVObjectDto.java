@@ -6,30 +6,28 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import ru.on8off.crud.backend.repository.entity.Project;
+import ru.on8off.crud.backend.repository.entity.KVObject;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ProjectDto {
+public class KVObjectDto {
     private Integer id;
-    private String code;
-    private String name;
-    private String description;
+    private String key;
+    private String value;
     private ZonedDateTime dateCreated;
     private ZonedDateTime dateUpdated;
 
 
-    public static ProjectDto fromEntity(Project entity){
+    public static KVObjectDto fromEntity(KVObject entity){
         if(entity == null) {
             return null;
         }
-        var dto = new ProjectDto();
+        var dto = new KVObjectDto();
         dto.setId(entity.getId());
-        dto.setCode(entity.getCode());
-        dto.setName(entity.getName());
-        dto.setDescription(entity.getDescription());
+        dto.setKey(entity.getKey());
+        dto.setValue(entity.getValue());
         dto.setDateCreated(entity.getDateCreated());
         dto.setDateUpdated(entity.getDateUpdated());
         return dto;
