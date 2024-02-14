@@ -6,27 +6,27 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import ru.on8off.crud.backend.repository.entity.KVObject;
+import ru.on8off.crud.backend.repository.entity.StoredObject;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class KVObjectDto {
+public class StoredObjectDto {
     private Integer id;
-    private String key;
+    private String name;
     private String value;
     private ZonedDateTime dateCreated;
     private ZonedDateTime dateUpdated;
 
 
-    public static KVObjectDto fromEntity(KVObject entity){
+    public static StoredObjectDto fromEntity(StoredObject entity){
         if(entity == null) {
             return null;
         }
-        var dto = new KVObjectDto();
+        var dto = new StoredObjectDto();
         dto.setId(entity.getId());
-        dto.setKey(entity.getKey());
+        dto.setName(entity.getName());
         dto.setValue(entity.getValue());
         dto.setDateCreated(entity.getDateCreated());
         dto.setDateUpdated(entity.getDateUpdated());

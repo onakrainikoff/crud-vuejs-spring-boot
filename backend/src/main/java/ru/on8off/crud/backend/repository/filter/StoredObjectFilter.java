@@ -10,19 +10,19 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
-import ru.on8off.crud.backend.repository.entity.KVObject;
+import ru.on8off.crud.backend.repository.entity.StoredObject;
 
-public class KVObjectFilter implements Specification<KVObject>{
-    private String key;
+public class StoredObjectFilter implements Specification<StoredObject>{
+    private String name;
     private String value;
     private ZonedDateTime dateCreatedFrom;
     private ZonedDateTime dateCreatedTo;
     private ZonedDateTime dateUpdatedFrom;
     private ZonedDateTime dateUpdatedTo;
 
-    public KVObjectFilter(String key, String value, ZonedDateTime dateCreatedFrom, ZonedDateTime dateCreatedTo,
+    public StoredObjectFilter(String name, String value, ZonedDateTime dateCreatedFrom, ZonedDateTime dateCreatedTo,
             ZonedDateTime dateUpdatedFrom, ZonedDateTime dateUpdatedTo) {
-        this.key = key;
+        this.name = name;
         this.value = value;
         this.dateCreatedFrom = dateCreatedFrom;
         this.dateCreatedTo = dateCreatedTo;
@@ -31,21 +31,21 @@ public class KVObjectFilter implements Specification<KVObject>{
     }
 
     @Override
-    public Predicate toPredicate(Root<KVObject> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+    public Predicate toPredicate(Root<StoredObject> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         List<Predicate> predicates = new ArrayList<>();
 
-        if(key!=null && !key.isEmpty()) {
+        if(name!=null && !name.isEmpty()) {
             predicates.add(
                 cb.like(
-                    root.<String>get("key"),
-                    (key.contains("%") || key.contains("_")) ? key: "%" + key + "%"
+                    root.<String>get("name"),
+                    (name.contains("%") || name.contains("_")) ? name: "%" + name + "%"
                 )
             );   
         }
         if(value!=null && !value.isEmpty()){
             predicates.add(
                 cb.like(
-                    root.<String>get("name"),
+                    root.<String>get("value"),
                     (value.contains("%") || value.contains("_")) ? value :  "%" + value + "%"
                 )
             );

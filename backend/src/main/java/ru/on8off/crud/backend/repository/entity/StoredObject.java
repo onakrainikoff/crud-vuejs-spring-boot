@@ -14,11 +14,11 @@ import java.time.ZonedDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "kv_objects")
+@Table(name = "stored_objects")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class KVObject {
+public class StoredObject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -31,7 +31,7 @@ public class KVObject {
     protected ZonedDateTime dateUpdated = ZonedDateTime.now();
 
     @Column(nullable = false, unique = true)
-    private String key;
+    private String name;
 
     @Column(nullable = false)
     private String value;
@@ -41,7 +41,7 @@ public class KVObject {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        KVObject obj = (KVObject) o;
+        StoredObject obj = (StoredObject) o;
         return Objects.equals(id, obj.id);
     }
 

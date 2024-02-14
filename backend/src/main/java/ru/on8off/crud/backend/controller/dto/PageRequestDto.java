@@ -12,7 +12,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class PageRequest {
+public class PageRequestDto {
     private Integer pageSize;
     private Integer pageNumber;
     private String sortBy;
@@ -20,7 +20,7 @@ public class PageRequest {
 
     private static Integer PAGE_SIZE = 50;
 
-    public org.springframework.data.domain.PageRequest getPageRequest(){
+    public org.springframework.data.domain.PageRequest toPageRequest(){
         pageNumber = Objects.requireNonNullElse(pageNumber, 0);
         pageSize= Objects.requireNonNullElse(pageSize, PAGE_SIZE);
         var pageRequest = org.springframework.data.domain.PageRequest.of(pageNumber, pageSize);

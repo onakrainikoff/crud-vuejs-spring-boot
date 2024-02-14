@@ -6,22 +6,22 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import ru.on8off.crud.backend.repository.entity.KVObject;
+import ru.on8off.crud.backend.repository.entity.StoredObject;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class KVObjectRequest{
+public class StoredObjectRequestDto{
     @NotBlank
     @Size(max = 1000)
-    private String key;
+    private String name;
     private String value;
 
 
-    public KVObject toEntity(){
-        var entity = new KVObject();
-        entity.setKey(this.getKey());
+    public StoredObject toEntity(){
+        var entity = new StoredObject();
+        entity.setName(this.getName());
         entity.setValue(this.getValue());
         return entity;
     }
