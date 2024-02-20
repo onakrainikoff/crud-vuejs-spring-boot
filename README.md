@@ -1,8 +1,10 @@
 # crud-vuejs-spring-boot
 
+<!-- Overview -->
+
 ## Develop
 
-### DataBase
+#### DataBase
 ```
 cd backend
 
@@ -13,7 +15,7 @@ mvn docker:run -Pdocker
 mvn docker:stop -Pdocker
 ```
 
-### Backend
+#### Backend
 ```
 cd backend
 
@@ -24,34 +26,43 @@ mvn spring-boot:run
 mvn clean verify -Pdocker
 ```
 
-### Frontend
+#### Frontend
 ```
 cd frontend
 
 #run frontend
-npm run serve
+npm run dev
 ```
 
 ## Run in Docker
 
-### Build Backend
+#### Build Backend
 ```
 cd backend
 mvn clean install -Pdocker
 ```
 
-### Build Frontend
+#### Build Frontend
 ```
 cd frontend
 npm run build-docker
 ```
 
-### Run Docker-compose
+#### Run Docker-compose
 ```
 docker-compose up -d
 ```
 
-### Open Browser
+#### Open Browser
 ```
 http://localhost:80/ 
 ```
+
+## Used Technologies
+- Spring Boot
+- Spring Data JPA
+- Vue 3
+- Vite
+- CoreUI
+
+## Links

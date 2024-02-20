@@ -28,12 +28,14 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import StoredObjectsPage  from "./views/StoredObjectsPage.vue"
+  import StoredObjectsListView  from "./views/stored-object/StoredObjectsListView.vue"
+  import AboutView  from "./views/about/AboutView.vue"
 
   export default defineComponent({
     name: 'App',
     components: {
-      StoredObjectsPage
+      StoredObjectsListView,
+      AboutView
     }
   })
 
